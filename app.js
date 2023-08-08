@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
-
+const rateLimit = require('express-rate-limit');
+const cors = require('cors');
+const helmet = require('helmet');
 const { errors, celebrate, Joi } = require('celebrate');
 const mongoose = require('mongoose');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -13,6 +15,14 @@ const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000, DB_HOST, NODE_ENV } = process.env;
 app.use(express.json());
+app.use(cors());
+app.use(helmet());
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+}));
 
 mongoose
   .connect(NODE_ENV === 'production' ? DB_HOST : 'mongodb://0.0.0.0:27017/bitfilmsdb', {
