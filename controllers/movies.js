@@ -10,7 +10,7 @@ const getMovie = (req, res, next) => Movie.find({}).populate('owner')
 const createMovie = (req, res, next) => {
   const {
     country, director, duration, year, description,
-    image, trailer, nameRU, nameEN, thumbnail, movieId,
+    image, trailerLink, nameRU, nameEN, thumbnail, movieId,
   } = req.body;
 
   return Movie.create({
@@ -20,7 +20,7 @@ const createMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,

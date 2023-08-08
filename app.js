@@ -11,11 +11,11 @@ const app = express();
 const { login, createUser } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, DB_HOST, NODE_ENV } = process.env;
 app.use(express.json());
 
 mongoose
-  .connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+  .connect(NODE_ENV === 'production' ? DB_HOST : 'mongodb://0.0.0.0:27017/bitfilmsdb', {
     useNewUrlParser: true,
     autoIndex: true,
   })

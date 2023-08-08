@@ -37,7 +37,7 @@ const movieSchema = new mongoose.Schema({
       message: (props) => `${props.value} - невалидная ссылка!`,
     },
   },
-  thumbnial: {
+  thumbnail: {
     type: String,
     required: true,
     validate: {
