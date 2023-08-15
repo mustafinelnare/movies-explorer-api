@@ -65,11 +65,17 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret', { expiresIn: '7d' });
-      return res
-        .status(200)
-        .send({ token });
+      return res.status(200).cookie('jwt', token, { maxAge: 3600000, httpOnly: true }).send({ data: email });
     })
     .catch(next);
+};
+
+const signOut = async (req, res, next) => {
+  try {
+    await res.status(200).clearCookie('jwt').send({ message: 'Вы вышли из своей учетной записи.' });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {
@@ -77,4 +83,5 @@ module.exports = {
   updateProfile,
   login,
   createUser,
+  signOut,
 };
