@@ -3,9 +3,15 @@ const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 
-const getMovie = (req, res, next) => Movie.find({}).populate(['owner'])
-  .then((movie) => res.status(200).send(movie))
-  .catch((error) => next(error));
+const getMovie = (req, res, next) => {
+  const owner = req.user._id;
+
+  Movie.find({ owner })
+    .then((movie) => {
+      res.status(200).send(movie);
+    })
+    .catch(next);
+};
 
 const createMovie = (req, res, next) => {
   const {
